@@ -26,7 +26,7 @@ abbrev = "SIDN"
  street = "Postbus 5022"
  city = "Arnhem"
  code = "6802EA"
- country = "The Netherlands"
+ country = "Netherlands"
 
 [[author]]
 initials = "S.W.J."
@@ -40,7 +40,7 @@ abbrev = "SIDN"
  street = "Postbus 5022"
  city = "Arnhem"
  code = "6802EA"
- country = "The Netherlands"
+ country = "Netherlands"
 
 [[author]]
 initials="W."
@@ -53,7 +53,7 @@ organization = "NLnet Labs"
  street = "Science Park 400"
  city = "Amsterdam"
  code = "1098 XH"
- country = "The Netherlands"
+ country = "Netherlands"
 
 %%%
 
