@@ -26,10 +26,10 @@ abbrev = "SIDN"
  street = "Postbus 5022"
  city = "Arnhem"
  code = "6802EA"
- country = "Netherlands"
+ country = "The Netherlands"
 
 [[author]]
-initials = "S."
+initials = "S.W.J."
 surname = "Ubbink"
 fullname = "Stefan Ubbink"
 organization = "Stichting Internet Domeinregistratie Nederland"
@@ -40,7 +40,7 @@ abbrev = "SIDN"
  street = "Postbus 5022"
  city = "Arnhem"
  code = "6802EA"
- country = "Netherlands"
+ country = "The Netherlands"
 
 [[author]]
 initials="W."
@@ -53,7 +53,7 @@ organization = "NLnet Labs"
  street = "Science Park 400"
  city = "Amsterdam"
  code = "1098 XH"
- country = "Netherlands"
+ country = "The Netherlands"
 
 %%%
 
@@ -64,7 +64,7 @@ This document seeks to specify a method for name servers to signal programs outs
 These signals can be used to invoke actions in areas that help provide the DNS service, such as routing.
 
 Currently this document serves as a requirements document to come to a signalling mechanism that will suit the use cases best.
-Part of that effort is to assemble a list of conditions with potential associated out of DNS protocol actions, as well as inventory and asses existing signalling mechanisms for suitability.
+Part of that effort is to assemble a list of conditions with potential associated out of DNS protocol actions, as well as inventory and assess existing signalling mechanisms for suitability.
 
 
 {mainmatter}
@@ -73,12 +73,12 @@ Part of that effort is to assemble a list of conditions with potential associate
 # Introduction {#introduction}
 
 Operators of name servers can benefit from automatically taking action upon certain conditions in the name server software.
-Some conditions can be monitored from outside of the name server software, but for adequate and immediate action, the name server software can signal itself about the condition immediately when it occurs to invoke action by a listener for these signals.
+Some conditions can be monitored from outside the name server software, but for adequate and immediate action, the name server software can signal itself about the condition immediately when it occurs to invoke action by a listener for these signals.
 
-An example of such a condition is whether all zones, from a set served from an anycasteded prefix, are loaded and ready to be served, with the associated automatic actions to only announce a prefix route from the point-of-presence where the name server is running, if all zones from the set are ready to be served, and to withdraw the prefix route if one of the zones cannot be served.
+An example of such a condition is when all zones, from a set served from an anycasted prefix, are loaded and ready to be served, with the associated automatic actions to only announce a prefix route from the point-of-presence where the name server is running, if all zones from the set are ready to be served, and to withdraw the prefix route if one of the zones cannot be served.
 This way queries for zones will only reach the point-of-presence if the name server software can answer those queries.
 
-Operators of anycasted DNS authoritative services with diverse implementations will benefit from standardized out of the name server signalling, but before coming to a specification for the mechanism, this document will serve to inventorise the already available standardized and non-standardized signalling channels and assess them for usability for out of protocol signalling.
+Operators of anycasted DNS authoritative services with diverse implementations will benefit from standardizing of the name server signalling, but before coming to a specification for the mechanism, this document will serve to inventorise the already available standardized and non-standardized signalling channels and assess them for usability for out of protocol signalling.
 
 
 # Terminology and Definitions {#terminology}
@@ -109,6 +109,8 @@ It is by no means meant to be a complete list, but serves to inventorise the req
 ## A zone from a set of zones is loaded and ready to be served
 
 ## One or more zones from a set of zones is about to expire
+
+## One or more zones from a set of zones is no longer about to expire
 
 ## One or more zones from a set of zones can no longer be served
 
