@@ -15,7 +15,7 @@ stream = "IETF"
 status = "standard"
 
 [[author]]
-initials = "M."
+initials = "M.W."
 surname = "Groeneweg"
 fullname = "Marc Groeneweg"
 organization = "Stichting Internet Domeinregistratie Nederland"
