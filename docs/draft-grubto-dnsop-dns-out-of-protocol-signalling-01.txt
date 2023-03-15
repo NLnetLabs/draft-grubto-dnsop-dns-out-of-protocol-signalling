@@ -6,7 +6,7 @@ DNSOP Working Group                                            C. Almond
 Internet-Draft                                                       ISC
 Intended status: Standards Track                             P. van Dijk
 Expires: 16 September 2023                                      PowerDNS
-                                                            M. Groeneweg
+                                                          M.W. Groeneweg
                                                            S.W.J. Ubbink
                                                                     SIDN
                                                                W. Toorop
