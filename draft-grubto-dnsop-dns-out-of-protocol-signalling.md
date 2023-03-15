@@ -15,6 +15,32 @@ stream = "IETF"
 status = "standard"
 
 [[author]]
+initials = "C."
+surname = "Almond"
+fullname = "Cathy Almond"
+organization = "Internet Systems Consortium, Inc."
+abbrev = "ISC"
+[author.address]
+ email = "cathya@isc.org"
+ phone = "+1 650 423 1300"
+[author.address.postal]
+ street = "PO Box 360"
+ city = "Newmarket"
+ code = "NH 03857"
+ country = "United States of America"
+
+[[author]]
+initials = "P."
+surname = "van Dijk"
+fullname = "Peter van Dijk"
+organization = "PowerDNS"
+[author.address]
+ email = "peter.van.dijk@powerdns.com"
+[author.address.postal]
+ city = "Den Haag"
+ country = "Netherlands"
+
+[[author]]
 initials = "M."
 surname = "Groeneweg"
 fullname = "Marc Groeneweg"
