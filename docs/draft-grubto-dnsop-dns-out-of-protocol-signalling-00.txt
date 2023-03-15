@@ -3,7 +3,7 @@
 
 
 DNSOP Working Group                                         M. Groeneweg
-Internet-Draft                                                 S. Ubbink
+Internet-Draft                                             S.W.J. Ubbink
 Intended status: Standards Track                                    SIDN
 Expires: 14 September 2023                                     W. Toorop
                                                               NLnet Labs
@@ -25,7 +25,7 @@ Abstract
    a signalling mechanism that will suit the use cases best.  Part of
    that effort is to assemble a list of conditions with potential
    associated out of DNS protocol actions, as well as inventory and
-   asses existing signalling mechanisms for suitability.
+   assess existing signalling mechanisms for suitability.
 
 Status of This Memo
 
@@ -81,13 +81,15 @@ Table of Contents
             served . . . . . . . . . . . . . . . . . . . . . . . . .   4
      3.7.  One or more zones from a set of zones is about to
             expire . . . . . . . . . . . . . . . . . . . . . . . . .   4
-     3.8.  One or more zones from a set of zones can no longer be
+     3.8.  One or more zones from a set of zones is no longer about to
+            expire . . . . . . . . . . . . . . . . . . . . . . . . .   4
+     3.9.  One or more zones from a set of zones can no longer be
             served . . . . . . . . . . . . . . . . . . . . . . . . .   4
-     3.9.  Query rate is exceeding a threshold . . . . . . . . . . .   4
-     3.10. Query rate is below a threshold . . . . . . . . . . . . .   4
-     3.11. DNSSEC signatures are about to expire . . . . . . . . . .   4
-     3.12. DNSSEC signatures will no longer expire soon  . . . . . .   4
-     3.13. Extended DNS Error conditions . . . . . . . . . . . . . .   4
+     3.10. Query rate is exceeding a threshold . . . . . . . . . . .   4
+     3.11. Query rate is below a threshold . . . . . . . . . . . . .   4
+     3.12. DNSSEC signatures are about to expire . . . . . . . . . .   4
+     3.13. DNSSEC signatures will no longer expire soon  . . . . . .   4
+     3.14. Extended DNS Error conditions . . . . . . . . . . . . . .   4
    4.  Requirements for signalling mechanisms and channels . . . . .   4
    5.  Existing signalling mechanisms and channels . . . . . . . . .   4
      5.1.  Notify  . . . . . . . . . . . . . . . . . . . . . . . . .   4
@@ -107,8 +109,6 @@ Table of Contents
 
 
 
-
-
 Groeneweg, et al.       Expires 14 September 2023               [Page 2]
 
 Internet-Draft                  dns-oops                      March 2023
@@ -118,22 +118,22 @@ Internet-Draft                  dns-oops                      March 2023
 
    Operators of name servers can benefit from automatically taking
    action upon certain conditions in the name server software.  Some
-   conditions can be monitored from outside of the name server software,
+   conditions can be monitored from outside the name server software,
    but for adequate and immediate action, the name server software can
    signal itself about the condition immediately when it occurs to
    invoke action by a listener for these signals.
 
-   An example of such a condition is whether all zones, from a set
-   served from an anycasteded prefix, are loaded and ready to be served,
-   with the associated automatic actions to only announce a prefix route
-   from the point-of-presence where the name server is running, if all
-   zones from the set are ready to be served, and to withdraw the prefix
-   route if one of the zones cannot be served.  This way queries for
-   zones will only reach the point-of-presence if the name server
-   software can answer those queries.
+   An example of such a condition is when all zones, from a set served
+   from an anycasted prefix, are loaded and ready to be served, with the
+   associated automatic actions to only announce a prefix route from the
+   point-of-presence where the name server is running, if all zones from
+   the set are ready to be served, and to withdraw the prefix route if
+   one of the zones cannot be served.  This way queries for zones will
+   only reach the point-of-presence if the name server software can
+   answer those queries.
 
    Operators of anycasted DNS authoritative services with diverse
-   implementations will benefit from standardized out of the name server
+   implementations will benefit from standardizing of the name server
    signalling, but before coming to a specification for the mechanism,
    this document will serve to inventorise the already available
    standardized and non-standardized signalling channels and assess them
@@ -176,17 +176,19 @@ Internet-Draft                  dns-oops                      March 2023
 
 3.7.  One or more zones from a set of zones is about to expire
 
-3.8.  One or more zones from a set of zones can no longer be served
+3.8.  One or more zones from a set of zones is no longer about to expire
 
-3.9.  Query rate is exceeding a threshold
+3.9.  One or more zones from a set of zones can no longer be served
 
-3.10.  Query rate is below a threshold
+3.10.  Query rate is exceeding a threshold
 
-3.11.  DNSSEC signatures are about to expire
+3.11.  Query rate is below a threshold
 
-3.12.  DNSSEC signatures will no longer expire soon
+3.12.  DNSSEC signatures are about to expire
 
-3.13.  Extended DNS Error conditions
+3.13.  DNSSEC signatures will no longer expire soon
+
+3.14.  Extended DNS Error conditions
 
 4.  Requirements for signalling mechanisms and channels
 
@@ -215,8 +217,6 @@ Internet-Draft                  dns-oops                      March 2023
    Signalling MUST be performed in an authenticated and private manner.
 
 7.  Implementation Status
-
-
 
 
 

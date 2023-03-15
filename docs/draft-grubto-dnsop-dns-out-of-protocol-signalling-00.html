@@ -12,7 +12,7 @@
        This document seeks to specify a method for name servers to signal programs outside of the name server software, and which are not necessarily involved with the DNS protocol, about conditions that can arise within the name server.
 These signals can be used to invoke actions in areas that help provide the DNS service, such as routing. 
        Currently this document serves as a requirements document to come to a signalling mechanism that will suit the use cases best.
-Part of that effort is to assemble a list of conditions with potential associated out of DNS protocol actions, as well as inventory and asses existing signalling mechanisms for suitability. 
+Part of that effort is to assemble a list of conditions with potential associated out of DNS protocol actions, as well as inventory and assess existing signalling mechanisms for suitability. 
     " name="description">
 <meta content="xml2rfc 3.12.2" name="generator">
 <meta content="draft-grubto-dnsop-dns-out-of-protocol-signalling-00" name="ietf.draft">
@@ -1206,7 +1206,7 @@ li > p:last-of-type {
 <div class="org">SIDN</div>
 </div>
 <div class="author">
-      <div class="author-name">S. Ubbink</div>
+      <div class="author-name">S.W.J. Ubbink</div>
 <div class="org">SIDN</div>
 </div>
 <div class="author">
@@ -1222,7 +1222,7 @@ li > p:last-of-type {
 <p id="section-abstract-1">This document seeks to specify a method for name servers to signal programs outside of the name server software, and which are not necessarily involved with the DNS protocol, about conditions that can arise within the name server.
 These signals can be used to invoke actions in areas that help provide the DNS service, such as routing.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
 <p id="section-abstract-2">Currently this document serves as a requirements document to come to a signalling mechanism that will suit the use cases best.
-Part of that effort is to assemble a list of conditions with potential associated out of DNS protocol actions, as well as inventory and asses existing signalling mechanisms for suitability.<a href="#section-abstract-2" class="pilcrow">¶</a></p>
+Part of that effort is to assemble a list of conditions with potential associated out of DNS protocol actions, as well as inventory and assess existing signalling mechanisms for suitability.<a href="#section-abstract-2" class="pilcrow">¶</a></p>
 </section>
 <div id="status-of-memo">
 <section id="section-boilerplate.1">
@@ -1303,22 +1303,25 @@ Part of that effort is to assemble a list of conditions with potential associate
                 <p id="section-toc.1-1.3.2.7.1"><a href="#section-3.7" class="xref">3.7</a>.  <a href="#name-one-or-more-zones-from-a-se" class="xref">One or more zones from a set of zones is about to expire</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.8">
-                <p id="section-toc.1-1.3.2.8.1"><a href="#section-3.8" class="xref">3.8</a>.  <a href="#name-one-or-more-zones-from-a-set" class="xref">One or more zones from a set of zones can no longer be served</a></p>
+                <p id="section-toc.1-1.3.2.8.1"><a href="#section-3.8" class="xref">3.8</a>.  <a href="#name-one-or-more-zones-from-a-set" class="xref">One or more zones from a set of zones is no longer about to expire</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.9">
-                <p id="section-toc.1-1.3.2.9.1"><a href="#section-3.9" class="xref">3.9</a>.  <a href="#name-query-rate-is-exceeding-a-t" class="xref">Query rate is exceeding a threshold</a></p>
+                <p id="section-toc.1-1.3.2.9.1"><a href="#section-3.9" class="xref">3.9</a>.  <a href="#name-one-or-more-zones-from-a-set-" class="xref">One or more zones from a set of zones can no longer be served</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.10">
-                <p id="section-toc.1-1.3.2.10.1"><a href="#section-3.10" class="xref">3.10</a>. <a href="#name-query-rate-is-below-a-thres" class="xref">Query rate is below a threshold</a></p>
+                <p id="section-toc.1-1.3.2.10.1"><a href="#section-3.10" class="xref">3.10</a>. <a href="#name-query-rate-is-exceeding-a-t" class="xref">Query rate is exceeding a threshold</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.11">
-                <p id="section-toc.1-1.3.2.11.1"><a href="#section-3.11" class="xref">3.11</a>. <a href="#name-dnssec-signatures-are-about" class="xref">DNSSEC signatures are about to expire</a></p>
+                <p id="section-toc.1-1.3.2.11.1"><a href="#section-3.11" class="xref">3.11</a>. <a href="#name-query-rate-is-below-a-thres" class="xref">Query rate is below a threshold</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.12">
-                <p id="section-toc.1-1.3.2.12.1"><a href="#section-3.12" class="xref">3.12</a>. <a href="#name-dnssec-signatures-will-no-l" class="xref">DNSSEC signatures will no longer expire soon</a></p>
+                <p id="section-toc.1-1.3.2.12.1"><a href="#section-3.12" class="xref">3.12</a>. <a href="#name-dnssec-signatures-are-about" class="xref">DNSSEC signatures are about to expire</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.13">
-                <p id="section-toc.1-1.3.2.13.1"><a href="#section-3.13" class="xref">3.13</a>. <a href="#name-extended-dns-error-conditio" class="xref">Extended DNS Error conditions</a></p>
+                <p id="section-toc.1-1.3.2.13.1"><a href="#section-3.13" class="xref">3.13</a>. <a href="#name-dnssec-signatures-will-no-l" class="xref">DNSSEC signatures will no longer expire soon</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.14">
+                <p id="section-toc.1-1.3.2.14.1"><a href="#section-3.14" class="xref">3.14</a>. <a href="#name-extended-dns-error-conditio" class="xref">Extended DNS Error conditions</a></p>
 </li>
             </ul>
 </li>
@@ -1376,10 +1379,10 @@ Part of that effort is to assemble a list of conditions with potential associate
 <a href="#section-1" class="section-number selfRef">1. </a><a href="#name-introduction" class="section-name selfRef">Introduction</a>
       </h2>
 <p id="section-1-1">Operators of name servers can benefit from automatically taking action upon certain conditions in the name server software.
-Some conditions can be monitored from outside of the name server software, but for adequate and immediate action, the name server software can signal itself about the condition immediately when it occurs to invoke action by a listener for these signals.<a href="#section-1-1" class="pilcrow">¶</a></p>
-<p id="section-1-2">An example of such a condition is whether all zones, from a set served from an anycasteded prefix, are loaded and ready to be served, with the associated automatic actions to only announce a prefix route from the point-of-presence where the name server is running, if all zones from the set are ready to be served, and to withdraw the prefix route if one of the zones cannot be served.
+Some conditions can be monitored from outside the name server software, but for adequate and immediate action, the name server software can signal itself about the condition immediately when it occurs to invoke action by a listener for these signals.<a href="#section-1-1" class="pilcrow">¶</a></p>
+<p id="section-1-2">An example of such a condition is when all zones, from a set served from an anycasted prefix, are loaded and ready to be served, with the associated automatic actions to only announce a prefix route from the point-of-presence where the name server is running, if all zones from the set are ready to be served, and to withdraw the prefix route if one of the zones cannot be served.
 This way queries for zones will only reach the point-of-presence if the name server software can answer those queries.<a href="#section-1-2" class="pilcrow">¶</a></p>
-<p id="section-1-3">Operators of anycasted DNS authoritative services with diverse implementations will benefit from standardized out of the name server signalling, but before coming to a specification for the mechanism, this document will serve to inventorise the already available standardized and non-standardized signalling channels and assess them for usability for out of protocol signalling.<a href="#section-1-3" class="pilcrow">¶</a></p>
+<p id="section-1-3">Operators of anycasted DNS authoritative services with diverse implementations will benefit from standardizing of the name server signalling, but before coming to a specification for the mechanism, this document will serve to inventorise the already available standardized and non-standardized signalling channels and assess them for usability for out of protocol signalling.<a href="#section-1-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="terminology">
@@ -1451,45 +1454,52 @@ It is by no means meant to be a complete list, but serves to inventorise the req
       </h3>
 </section>
 </div>
-<div id="one-or-more-zones-from-a-set-of-zones-can-no-longer-be-served">
+<div id="one-or-more-zones-from-a-set-of-zones-is-no-longer-about-to-expire">
 <section id="section-3.8">
         <h3 id="name-one-or-more-zones-from-a-set">
-<a href="#section-3.8" class="section-number selfRef">3.8. </a><a href="#name-one-or-more-zones-from-a-set" class="section-name selfRef">One or more zones from a set of zones can no longer be served</a>
+<a href="#section-3.8" class="section-number selfRef">3.8. </a><a href="#name-one-or-more-zones-from-a-set" class="section-name selfRef">One or more zones from a set of zones is no longer about to expire</a>
+      </h3>
+</section>
+</div>
+<div id="one-or-more-zones-from-a-set-of-zones-can-no-longer-be-served">
+<section id="section-3.9">
+        <h3 id="name-one-or-more-zones-from-a-set-">
+<a href="#section-3.9" class="section-number selfRef">3.9. </a><a href="#name-one-or-more-zones-from-a-set-" class="section-name selfRef">One or more zones from a set of zones can no longer be served</a>
       </h3>
 </section>
 </div>
 <div id="query-rate-is-exceeding-a-threshold">
-<section id="section-3.9">
+<section id="section-3.10">
         <h3 id="name-query-rate-is-exceeding-a-t">
-<a href="#section-3.9" class="section-number selfRef">3.9. </a><a href="#name-query-rate-is-exceeding-a-t" class="section-name selfRef">Query rate is exceeding a threshold</a>
+<a href="#section-3.10" class="section-number selfRef">3.10. </a><a href="#name-query-rate-is-exceeding-a-t" class="section-name selfRef">Query rate is exceeding a threshold</a>
       </h3>
 </section>
 </div>
 <div id="query-rate-is-below-a-threshold">
-<section id="section-3.10">
+<section id="section-3.11">
         <h3 id="name-query-rate-is-below-a-thres">
-<a href="#section-3.10" class="section-number selfRef">3.10. </a><a href="#name-query-rate-is-below-a-thres" class="section-name selfRef">Query rate is below a threshold</a>
+<a href="#section-3.11" class="section-number selfRef">3.11. </a><a href="#name-query-rate-is-below-a-thres" class="section-name selfRef">Query rate is below a threshold</a>
       </h3>
 </section>
 </div>
 <div id="dnssec-signatures-are-about-to-expire">
-<section id="section-3.11">
+<section id="section-3.12">
         <h3 id="name-dnssec-signatures-are-about">
-<a href="#section-3.11" class="section-number selfRef">3.11. </a><a href="#name-dnssec-signatures-are-about" class="section-name selfRef">DNSSEC signatures are about to expire</a>
+<a href="#section-3.12" class="section-number selfRef">3.12. </a><a href="#name-dnssec-signatures-are-about" class="section-name selfRef">DNSSEC signatures are about to expire</a>
       </h3>
 </section>
 </div>
 <div id="dnssec-signatures-will-no-longer-expire-soon">
-<section id="section-3.12">
+<section id="section-3.13">
         <h3 id="name-dnssec-signatures-will-no-l">
-<a href="#section-3.12" class="section-number selfRef">3.12. </a><a href="#name-dnssec-signatures-will-no-l" class="section-name selfRef">DNSSEC signatures will no longer expire soon</a>
+<a href="#section-3.13" class="section-number selfRef">3.13. </a><a href="#name-dnssec-signatures-will-no-l" class="section-name selfRef">DNSSEC signatures will no longer expire soon</a>
       </h3>
 </section>
 </div>
 <div id="extended-dns-error-conditions">
-<section id="section-3.13">
+<section id="section-3.14">
         <h3 id="name-extended-dns-error-conditio">
-<a href="#section-3.13" class="section-number selfRef">3.13. </a><a href="#name-extended-dns-error-conditio" class="section-name selfRef">Extended DNS Error conditions</a>
+<a href="#section-3.14" class="section-number selfRef">3.14. </a><a href="#name-extended-dns-error-conditio" class="section-name selfRef">Extended DNS Error conditions</a>
       </h3>
 </section>
 </div>
