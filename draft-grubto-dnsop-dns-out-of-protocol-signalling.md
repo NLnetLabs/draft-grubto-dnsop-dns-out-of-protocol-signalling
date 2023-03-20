@@ -69,6 +69,16 @@ abbrev = "SIDN"
  country = "Netherlands"
 
 [[author]]
+initials = "D."
+surname = "Daniel"
+fullname = "Daniel Salzman"
+organization = "CZ.NIC"
+[author.address]
+ email = "daniel.salzman@nic.cz"
+[author.address.postal]
+ country = "CZ"
+
+[[author]]
 initials="W."
 surname="Toorop"
 fullname="Willem Toorop"
