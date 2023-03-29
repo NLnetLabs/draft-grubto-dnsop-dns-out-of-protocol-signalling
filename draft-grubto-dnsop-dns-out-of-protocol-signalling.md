@@ -134,31 +134,69 @@ It is by no means meant to be a complete list, but serves to inventorise the req
 
 ## The name server is running and can respond to queries
 
+## All zones are loaded and ready to serve {#allzonesready}
+
+Action:
+
+  - Start announcing the prefix on which these zones are served with BGP.
+
+## A zone is loaded and ready to serve
+
+Action:
+
+  - Start announcing the prefix on which this zone is served with BGP.
+
 ## A zone is updated to a new version {#updatedzone}
 
-## A zone is loaded and ready to be served
+Action:
 
-## A zone is about to expire
+  - Verify the zone content.
+    Is it DNSSEC valid, does the ZONEMD validate.
 
-## A zone can no longer be served
+## A zone is (about to) expire
 
-## A zone from a set of zones is loaded and ready to be served
+The period before expiration may be configurable.
+A value of 0 will emit the signal the moment the zone expires.
 
-## One or more zones from a set of zones is about to expire
+Action:
 
-## One or more zones from a set of zones is no longer about to expire
+  - Stop the BGP announcement of the prefix on which the zone is served.
+    It may be reannounced when the zone becomes available again (See (#allzonesready)).
 
-## One or more zones from a set of zones can no longer be served
+## DNSSEC signatures are (about to) expire
 
-## Query rate is exceeding a threshold
+The period before expiration may be configurable.
+A value of 0 will emit the signal the DNSSEC signature expires.
 
-## Query rate is below a threshold
+Action:
 
-## DNSSEC signatures are about to expire
+  - Stop the BGP announcement of the prefix on which the zone is served.
+    It may be reannounced when the zone becomes DNSSEC valid again (See (#dnssecokagain)).
 
-## DNSSEC signatures will no longer expire soon
+## DNSSEC signatures will no longer expire soon {#dnssecokagain}
+
+Action:
+
+  - Start announcing the prefix on which this zone is served with BGP.
+
+## Query rate is exceeding a threshold {#queryratehigh}
+
+Action:
+
+  - Lengthen the AS path for the BGP announcement for a prefix, to demotivate the anycast node that receives all the queries.
+  - Or if the query rate is indicating a denial of service attack, keep the BGP AS path short, to absorb the attack.
+
+## Query rate is below a threshold again
+
+Action:
+
+  - Recover from the measures taken in (#queryratehigh)
 
 ## Extended DNS Error conditions
+
+Action:
+
+  - Dependent on the DNS Error condition
 
 # Requirements for signalling mechanisms and channels {#requirements}
 
