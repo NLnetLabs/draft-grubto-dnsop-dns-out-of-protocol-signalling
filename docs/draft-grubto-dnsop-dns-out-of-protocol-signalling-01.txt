@@ -5,13 +5,15 @@
 DNSOP Working Group                                            C. Almond
 Internet-Draft                                                       ISC
 Intended status: Standards Track                             P. van Dijk
-Expires: 16 September 2023                                      PowerDNS
+Expires: 30 September 2023                                      PowerDNS
                                                           M.W. Groeneweg
                                                            S.W.J. Ubbink
                                                                     SIDN
+                                                               D. Daniel
+                                                                  CZ.NIC
                                                                W. Toorop
                                                               NLnet Labs
-                                                           15 March 2023
+                                                           29 March 2023
 
 
                      DNS Out Of Protocol Signalling
@@ -46,14 +48,12 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 16 September 2023.
+   This Internet-Draft will expire on 30 September 2023.
 
 
 
 
-
-
-Almond, et al.          Expires 16 September 2023               [Page 1]
+Almond, et al.          Expires 30 September 2023               [Page 1]
 
 Internet-Draft                  dns-oops                      March 2023
 
@@ -78,45 +78,41 @@ Table of Contents
    2.  Terminology and Definitions . . . . . . . . . . . . . . . . .   3
    3.  Conditions to be signalled  . . . . . . . . . . . . . . . . .   3
      3.1.  The name server is running and can respond to queries . .   3
-     3.2.  A zone is updated to a new version  . . . . . . . . . . .   3
-     3.3.  A zone is loaded and ready to be served . . . . . . . . .   4
-     3.4.  A zone is about to expire . . . . . . . . . . . . . . . .   4
-     3.5.  A zone can no longer be served  . . . . . . . . . . . . .   4
-     3.6.  A zone from a set of zones is loaded and ready to be
-            served . . . . . . . . . . . . . . . . . . . . . . . . .   4
-     3.7.  One or more zones from a set of zones is about to
-            expire . . . . . . . . . . . . . . . . . . . . . . . . .   4
-     3.8.  One or more zones from a set of zones is no longer about to
-            expire . . . . . . . . . . . . . . . . . . . . . . . . .   4
-     3.9.  One or more zones from a set of zones can no longer be
-            served . . . . . . . . . . . . . . . . . . . . . . . . .   4
-     3.10. Query rate is exceeding a threshold . . . . . . . . . . .   4
-     3.11. Query rate is below a threshold . . . . . . . . . . . . .   4
-     3.12. DNSSEC signatures are about to expire . . . . . . . . . .   4
-     3.13. DNSSEC signatures will no longer expire soon  . . . . . .   4
-     3.14. Extended DNS Error conditions . . . . . . . . . . . . . .   4
-   4.  Requirements for signalling mechanisms and channels . . . . .   4
-   5.  Existing signalling mechanisms and channels . . . . . . . . .   4
-     5.1.  Notify  . . . . . . . . . . . . . . . . . . . . . . . . .   4
-     5.2.  Extended DNS Error reporting  . . . . . . . . . . . . . .   4
-     5.3.  D-Bus as publication channel  . . . . . . . . . . . . . .   4
+     3.2.  All zones are loaded and ready to serve . . . . . . . . .   3
+     3.3.  A zone is loaded and ready to serve . . . . . . . . . . .   4
+     3.4.  A zone is updated to a new version  . . . . . . . . . . .   4
+     3.5.  A zone is (about to) expire . . . . . . . . . . . . . . .   4
+     3.6.  DNSSEC signatures are (about to) expire . . . . . . . . .   4
+     3.7.  DNSSEC signatures will no longer expire soon  . . . . . .   4
+     3.8.  Query rate is exceeding a threshold . . . . . . . . . . .   4
+     3.9.  Query rate is below a threshold again . . . . . . . . . .   5
+     3.10. Extended DNS Error conditions . . . . . . . . . . . . . .   5
+   4.  Requirements for signalling mechanisms and channels . . . . .   5
+   5.  Existing signalling mechanisms and channels . . . . . . . . .   5
+     5.1.  Notify  . . . . . . . . . . . . . . . . . . . . . . . . .   5
+     5.2.  Extended DNS Error reporting  . . . . . . . . . . . . . .   5
+     5.3.  D-Bus as publication channel  . . . . . . . . . . . . . .   5
    6.  Security and Privacy Considerations . . . . . . . . . . . . .   5
    7.  Implementation Status . . . . . . . . . . . . . . . . . . . .   5
-   8.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .   5
-   9.  Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .   5
-   10. Normative References  . . . . . . . . . . . . . . . . . . . .   5
-   11. Informative References  . . . . . . . . . . . . . . . . . . .   5
+   8.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .   6
+   9.  Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .   6
+   10. Normative References  . . . . . . . . . . . . . . . . . . . .   6
+   11. Informative References  . . . . . . . . . . . . . . . . . . .   6
+   Appendix A.  Implementation Status  . . . . . . . . . . . . . . .   6
+   Appendix B.  Change History . . . . . . . . . . . . . . . . . . .   7
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .   7
 
 
 
-Almond, et al.          Expires 16 September 2023               [Page 2]
+
+
+
+
+
+Almond, et al.          Expires 30 September 2023               [Page 2]
 
 Internet-Draft                  dns-oops                      March 2023
 
-
-   Appendix A.  Implementation Status  . . . . . . . . . . . . . . .   6
-   Appendix B.  Change History . . . . . . . . . . . . . . . . . . .   6
-   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .   6
 
 1.  Introduction
 
@@ -160,39 +156,90 @@ Internet-Draft                  dns-oops                      March 2023
 
 3.1.  The name server is running and can respond to queries
 
-3.2.  A zone is updated to a new version
+3.2.  All zones are loaded and ready to serve
+
+   Action:
+
+   *  Start announcing the prefix on which these zones are served with
+      BGP.
 
 
 
-
-Almond, et al.          Expires 16 September 2023               [Page 3]
+Almond, et al.          Expires 30 September 2023               [Page 3]
 
 Internet-Draft                  dns-oops                      March 2023
 
 
-3.3.  A zone is loaded and ready to be served
+3.3.  A zone is loaded and ready to serve
 
-3.4.  A zone is about to expire
+   Action:
 
-3.5.  A zone can no longer be served
+   *  Start announcing the prefix on which this zone is served with BGP.
 
-3.6.  A zone from a set of zones is loaded and ready to be served
+3.4.  A zone is updated to a new version
 
-3.7.  One or more zones from a set of zones is about to expire
+   Action:
 
-3.8.  One or more zones from a set of zones is no longer about to expire
+   *  Verify the zone content.  Is it DNSSEC valid, does the ZONEMD
+      validate.
 
-3.9.  One or more zones from a set of zones can no longer be served
+3.5.  A zone is (about to) expire
 
-3.10.  Query rate is exceeding a threshold
+   The period before expiration may be configurable.  A value of 0 will
+   emit the signal the moment the zone expires.
 
-3.11.  Query rate is below a threshold
+   Action:
 
-3.12.  DNSSEC signatures are about to expire
+   *  Stop the BGP announcement of the prefix on which the zone is
+      served.  It may be reannounced when the zone becomes available
+      again (See Section 3.2).
 
-3.13.  DNSSEC signatures will no longer expire soon
+3.6.  DNSSEC signatures are (about to) expire
 
-3.14.  Extended DNS Error conditions
+   The period before expiration may be configurable.  A value of 0 will
+   emit the signal the DNSSEC signature expires.
+
+   Action:
+
+   *  Stop the BGP announcement of the prefix on which the zone is
+      served.  It may be reannounced when the zone becomes DNSSEC valid
+      again (See Section 3.7).
+
+3.7.  DNSSEC signatures will no longer expire soon
+
+   Action:
+
+   *  Start announcing the prefix on which this zone is served with BGP.
+
+3.8.  Query rate is exceeding a threshold
+
+   Action:
+
+   *  Lengthen the AS path for the BGP announcement for a prefix, to
+      demotivate the anycast node that receives all the queries.
+
+
+
+
+Almond, et al.          Expires 30 September 2023               [Page 4]
+
+Internet-Draft                  dns-oops                      March 2023
+
+
+   *  Or if the query rate is indicating a denial of service attack,
+      keep the BGP AS path short, to absorb the attack.
+
+3.9.  Query rate is below a threshold again
+
+   Action:
+
+   *  Recover from the measures taken in Section 3.8
+
+3.10.  Extended DNS Error conditions
+
+   Action:
+
+   *  Dependent on the DNS Error condition
 
 4.  Requirements for signalling mechanisms and channels
 
@@ -216,16 +263,6 @@ Internet-Draft                  dns-oops                      March 2023
 
    [D-Bus]
 
-
-
-
-
-
-Almond, et al.          Expires 16 September 2023               [Page 4]
-
-Internet-Draft                  dns-oops                      March 2023
-
-
 6.  Security and Privacy Considerations
 
    Signalling MUST be performed in an authenticated and private manner.
@@ -235,6 +272,15 @@ Internet-Draft                  dns-oops                      March 2023
    *  Knot DNS has support for D-Bus notifications (See Section 5.3) for
       significant server and zone events with the "dbus-event"
       configuration parameter since version 3.1.6 [Knot-DNS-3.1.6]
+
+
+
+
+
+Almond, et al.          Expires 30 September 2023               [Page 5]
+
+Internet-Draft                  dns-oops                      March 2023
+
 
 8.  IANA Considerations
 
@@ -275,19 +321,22 @@ Internet-Draft                  dns-oops                      March 2023
               Changes (DNS NOTIFY)", RFC 1996, DOI 10.17487/RFC1996,
               August 1996, <https://www.rfc-editor.org/info/rfc1996>.
 
-
-
-Almond, et al.          Expires 16 September 2023               [Page 5]
-
-Internet-Draft                  dns-oops                      March 2023
-
-
 Appendix A.  Implementation Status
 
    *Note to the RFC Editor*: please remove this entire appendix before
    publication.
 
    Knot currently uses [D-Bus] for this.
+
+
+
+
+
+
+Almond, et al.          Expires 30 September 2023               [Page 6]
+
+Internet-Draft                  dns-oops                      March 2023
+
 
 Appendix B.  Change History
 
@@ -332,8 +381,15 @@ Authors' Addresses
    Email: stefan.ubbink@sidn.nl
 
 
+   Daniel Salzman
+   CZ.NIC
+   Czechia
+   Email: daniel.salzman@nic.cz
 
-Almond, et al.          Expires 16 September 2023               [Page 6]
+
+
+
+Almond, et al.          Expires 30 September 2023               [Page 7]
 
 Internet-Draft                  dns-oops                      March 2023
 
@@ -389,4 +445,4 @@ Internet-Draft                  dns-oops                      March 2023
 
 
 
-Almond, et al.          Expires 16 September 2023               [Page 7]
+Almond, et al.          Expires 30 September 2023               [Page 8]
