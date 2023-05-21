@@ -70,7 +70,7 @@ abbrev = "SIDN"
 
 [[author]]
 initials = "D."
-surname = "Daniel"
+surname = "Salzman"
 fullname = "Daniel Salzman"
 organization = "CZ.NIC"
 [author.address]
