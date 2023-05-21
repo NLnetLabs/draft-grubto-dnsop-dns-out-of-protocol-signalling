@@ -116,6 +116,8 @@ This way queries for zones will only reach the point-of-presence if the name ser
 
 Operators of anycasted DNS authoritative services with diverse implementations will benefit from standardizing of the name server signalling, but before coming to a specification for the mechanism, this document will serve to inventorise the already available standardized and non-standardized signalling channels and assess them for usability for out of protocol signalling.
 
+Recursive server operators could also benefit from this, having an eventdriven infrastructure - when recursive server is ready to serve, start announcing the service address with BGP. The usual way to do this is by polling the server, and spending resources waiting for this service to come up.
+
 
 # Terminology and Definitions {#terminology}
 
@@ -127,41 +129,16 @@ BCP 14 [@!RFC2119;@!RFC8174] when, and only when, they appear in all
 capitals, as shown here.
 
 
-# Conditions to be signalled {#conditions}
+# Conditions to be signalled from within the name server{#conditions_inside}
 
 This section served to collect a list of conditions for which actions outside of the DNS protocol may be interesting.
 It is by no means meant to be a complete list, but serves to inventorise the requirements for the signalling channel.
-
-## The name server is running and can respond to queries
 
 ## All zones are loaded and ready to serve {#allzonesready}
 
 Action:
 
   - Start announcing the prefix on which these zones are served with BGP.
-
-## A zone is loaded and ready to serve
-
-Action:
-
-  - Start announcing the prefix on which this zone is served with BGP.
-
-## A zone is updated to a new version {#updatedzone}
-
-Action:
-
-  - Verify the zone content.
-    Is it DNSSEC valid, does the ZONEMD validate.
-
-## A zone is (about to) expire
-
-The period before expiration may be configurable.
-A value of 0 will emit the signal the moment the zone expires.
-
-Action:
-
-  - Stop the BGP announcement of the prefix on which the zone is served.
-    It may be reannounced when the zone becomes available again (See (#allzonesready)).
 
 ## DNSSEC signatures are (about to) expire
 
@@ -185,6 +162,7 @@ Action:
 
   - Lengthen the AS path for the BGP announcement for a prefix, to demotivate the anycast node that receives all the queries.
   - Or if the query rate is indicating a denial of service attack, keep the BGP AS path short, to absorb the attack.
+  - Signal to SIEM and logging that  problem has been observed.
 
 ## Query rate is below a threshold again
 
@@ -198,9 +176,78 @@ Action:
 
   - Dependent on the DNS Error condition
 
+# Conditions to be signalled from outside the name server{#conditions_outside}
+
+## The name server is running and can respond to queries
+
+How to identify:
+
+  - check if the name server is running and do a query to see if it responds
+
+Action:
+
+  - Start announcing the prefix on which this zone is served with BGP
+
+## A zone is loaded and ready to serve
+
+How to identify:
+
+  - Query the zone, see responses
+
+Input: zone and prefix to announce
+Output: prefix to announce
+
+Action:
+
+  - Start announcing the prefix on which this zone is served with BGP.
+
+## A zone is updated to a new version {#updatedzone}
+
+How to identify:
+
+  - Query zone SOA record, register value and then compare to expected version
+
+Action:
+
+  - Verify the zone content.
+    Is it DNSSEC valid, does the ZONEMD validate.
+
+## A zone is (about to) expire
+
+The period before expiration may be configurable.
+A value of 0 will emit the signal the moment the zone expires.
+
+Action:
+
+  - Stop the BGP announcement of the prefix on which the zone is served.
+    It may be reannounced when the zone becomes available again (See (#allzonesready)).
+
+## Shutting down
+
+How to identify:
+
+  - Maintenance, before shutting down the name server, initiate at least the BGP withdrawl
+
+Action:
+
+  - Stop the BGP announcement of the prefix
+
+## The nameserver has crashed
+
+How to identify:
+
+  - The name server is no longer running (or does not respond to queries, although that might also be the case when it is under an attack)
+
+Action:
+
+    - Stop the BGP announcement of the prefix
+
+
+
+
 # Requirements for signalling mechanisms and channels {#requirements}
 
-The following requirements can be distilled from (#conditions).
+The following requirements can be distilled from (#conditions_inside) and (#conditions_outside).
 
 
 # Existing signalling mechanisms and channels {#existing}
@@ -226,6 +273,7 @@ Signalling MUST be performed in an authenticated and private manner.
 # Implementation Status {#implementation}
 
 * Knot DNS has support for D-Bus notifications (See (#dbus)) for significant server and zone events with the "`dbus-event`" configuration parameter since version 3.1.6 [@?Knot-DNS-3.1.6]
+* NSD has a feature branch [@?NSD-oops-branch] where work is being done on the implementation
 
 # IANA Considerations {#iana}
 
@@ -233,6 +281,10 @@ This document has no IANA actions
 
 
 # Acknowledgements {#acknowledgements}
+
+We would like to thank the people of the port53 hackathon in Rotterdam for
+their contributions. Mainly Doris Hauser, Lars-Johan Liman, Vilhelm Prytz and
+Henrik Kramselund
 
 
 
@@ -270,6 +322,16 @@ This document has no IANA actions
   </front>
 </reference>
 
+<reference anchor="NSD-oops-branch" target="https://github.com/NLnetLabs/nsd/tree/features/oops">
+  <front>
+    <title>NSD feature/oops branch</title>
+    <author>
+      <organization>NLnet Labs</organization>
+    </author>
+    <date month="May" year="2023" />
+  </front>
+</reference>
+
 {backmatter}
 
 
@@ -282,6 +344,11 @@ Knot currently uses [@D-Bus] for this.
 # Change History {#change}
 
 **Note to the RFC Editor**: please remove this entire appendix before publication.
+
+* draft-grubto-dnsop-dns-out-of-protocol-signalling-02
+
+> Updates after discussion during the port53 hackathon in Rotterdam.
+
 
 * draft-grubto-dnsop-dns-out-of-protocol-signalling-00
 
