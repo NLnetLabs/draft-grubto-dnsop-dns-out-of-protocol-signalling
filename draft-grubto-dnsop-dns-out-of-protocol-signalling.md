@@ -96,7 +96,7 @@ organization = "NLnet Labs"
 
 .# Abstract
 
-This document seeks to specify a method for name servers to signal programs outside of the name server software, and which are not necessarily involved with the DNS protocol, about conditions that can arise within the name server.
+This document seeks to specify a method for DNS servers to signal programs outside of the server software, and which are not necessarily involved with the DNS protocol, about conditions that can arise within the server.
 These signals can be used to invoke actions in areas that help provide the DNS service, such as routing.
 
 Currently this document serves as a requirements document to come to a signalling mechanism that will suit the use cases best.
@@ -134,100 +134,30 @@ BCP 14 [@!RFC2119;@!RFC8174] when, and only when, they appear in all
 capitals, as shown here.
 
 
-# Conditions to be signalled from within the name server{#conditions_inside}
+# Conditions to be signalled {#conditions}
 
 This section served to collect a list of conditions for which actions outside of the DNS protocol may be interesting.
-It is by no means meant to be a complete list, but serves to inventorise the requirements for the signalling channel.
+A signal will be sent if the condition is met, and also when the condition is no longer met.
+Some conditions take configuration parameters influencing when the conditions are met.
+Some conditions may contain arguments when signalled.
+When applicable, the parameters and arguments are given with each condition.
 
-## All zones are loaded and ready to serve {#allzonesready}
+Some conditions may be identified from outside of the DNS server by polling for the condition.
+This is more resource intensive that listening for a signal, but may also be more robust.
+When this is the case, how the condition can be identified is provided with the condition.
 
-Action:
-
-  - Start announcing the prefix on which these zones are served with BGP.
-
-## DNSSEC signatures are (about to) expire
-
-The period before expiration may be configurable.
-A value of 0 will emit the signal the DNSSEC signature expires.
-
-Action:
-
-  - Stop the BGP announcement of the prefix on which the zone is served.
-    It may be reannounced when the zone becomes DNSSEC valid again (See (#dnssecokagain)).
-
-## DNSSEC signatures will no longer expire soon {#dnssecokagain}
-
-Action:
-
-  - Start announcing the prefix on which this zone is served with BGP.
-
-## Query rate is exceeding a threshold {#queryratehigh}
-
-Action:
-
-  - Lengthen the AS path for the BGP announcement for a prefix, to demotivate the anycast node that receives all the queries.
-  - Or if the query rate is indicating a denial of service attack, keep the BGP AS path short, to absorb the attack.
-  - Signal to SIEM and logging that  problem has been observed.
-
-## Query rate is below a threshold again
-
-Action:
-
-  - Recover from the measures taken in (#queryratehigh)
-
-## Extended DNS Error conditions
-
-Action:
-
-  - Dependent on the DNS Error condition
-
-# Conditions to be signalled from outside the name server{#conditions_outside}
-
-## The name server is running and can respond to queries
+## The DNS server is running and can respond to queries {#isrunning}
 
 How to identify:
 
-  - check if the name server is running and do a query to see if it responds
+  - check if the DNS server is running by doing a query to see if it responds
 
 Action:
 
   - Start announcing the prefix on which this zone is served with BGP
+    A announcement may be withdrawn when the condition is no longer met.
 
-## A zone is loaded and ready to serve
-
-How to identify:
-
-  - Query the zone, see responses
-
-Input: zone and prefix to announce
-Output: prefix to announce
-
-Action:
-
-  - Start announcing the prefix on which this zone is served with BGP.
-
-## A zone is updated to a new version {#updatedzone}
-
-How to identify:
-
-  - Query zone SOA record, register value and then compare to expected version
-
-Action:
-
-  - Verify the zone content.
-    Is it DNSSEC valid, does the ZONEMD validate.
-
-## A zone is (about to) expire
-
-The period before expiration may be configurable.
-A value of 0 will emit the signal the moment the zone expires.
-
-Action:
-
-  - Stop the BGP announcement of the prefix on which the zone is served.
-    It may be reannounced when the zone becomes available again (See (#allzonesready)).
-
-## Shutting down
+## Shutting down {#shutdown}
 
 How to identify:
 
@@ -237,7 +167,7 @@ Action:
 
   - Stop the BGP announcement of the prefix
 
-## The nameserver has crashed
+## The nameserver has crashed {#crashed}
 
 How to identify:
 
@@ -247,6 +177,119 @@ Action:
 
     - Stop the BGP announcement of the prefix
 
+This condition maybe only detected from outside of the DNS server.
+
+## A zone is loaded and ready to serve {#azoneready}
+
+How to identify:
+
+  - Query the zone to see if it responds
+
+Argument:
+
+  - The zone that was loaded
+
+Action:
+
+  - Start announcing the prefix on which these zones are served with BGP.
+    A announcement may be withdrawn when the condition is no longer met.
+
+Some name servers, when configured to notify targets when a zone is updated [@!RFC1996], will also notify those targets when a zone is just loaded.
+The notify itself may be considered an appropriate signal, although it will not be emitted when the zone is no longer served.
+
+## All zones are loaded and ready to serve {#allzonesready}
+
+Action:
+
+  - Start announcing the prefix on which these zones are served with BGP.
+    A announcement may be withdrawn when the condition is no longer met.
+
+This condition may be derived from one or more "A zone is loaded and ready to serve" ((#azoneready)) signals when a list of all zones served is available.
+
+## A zone is updated to a new version {#updatedzone}
+
+How to identify:
+
+  - Query the zone's SOA record, register value and then compare to expected version
+
+Argument:
+
+  - The zone that was updated 
+
+Action:
+
+  - Verify the zone content. Is it DNSSEC valid, does the ZONEMD validate.
+
+Name servers can usually already signal this with NOTIFY [@!RFC1996]
+
+## A zone is (about to) expire
+
+Parameter:
+
+  - The period before expiration.
+    A value of 0 will emit the signal the moment the zone expires.
+
+Argument:
+
+  - The zone that is (about to) expire
+
+Action:
+
+  - Stop the BGP announcement of the prefix on which the zone is served.
+    It may be reannounced when the zone becomes available again (See (#azoneready)).
+
+## DNSSEC signatures are (about to) expire
+
+Parameter:
+
+  - The period before expiration.
+    A value of 0 will emit the signal the DNSSEC signature expires.
+
+Argument:
+
+  - The zone that contains the signature
+  - The resource record set owner name and type with the signature that will soon expire
+
+Action:
+
+  - Stop the BGP announcement of the prefix on which the zone is served.
+    It may be reannounced when the zone becomes DNSSEC valid again.
+
+## Query rate is exceeding a threshold {#queryratehigh}
+
+Parameter:
+
+  - The number of queries per second threshold.
+
+Action:
+
+  - Lengthen the AS path for the BGP announcement for a prefix, to demotivate the anycast node that receives all the queries.
+  - Or if the query rate is indicating a denial of service attack, keep the BGP AS path short, to absorb the attack.
+  - Signal to Security Information and Event Management SIEM and logging that  problem has been observed.
+
+## Query rate increase is exceeding a threshold {#queryrate_derivat}
+
+Parameter:
+
+  - The number of queries per second increase per second threshold.
+
+Action:
+
+  - The same actions as for "Query rate is exceeding a threshold" ((#queryratehigh)) apply.
+
+## Extended DNS Error conditions {#ede}
+
+Parameter:
+
+  - The Extended DNS Error conditions for which to signal [@!RFC8914]
+
+Argument:
+
+  - The Extended DNS Error condition that occurred.
+
+Action:
+
+  - Dependent on the DNS Error condition
 
 
 
@@ -261,7 +304,7 @@ What follows is a list of existing signalling mechanisms assessed on their suita
 
 ## Notify
 
-[@RFC1996]
+[@!RFC1996]
 
 ## Extended DNS Error reporting
 
