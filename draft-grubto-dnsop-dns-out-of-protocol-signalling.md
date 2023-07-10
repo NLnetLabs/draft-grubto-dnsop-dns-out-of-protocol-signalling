@@ -339,7 +339,7 @@ Disadvantages:
 
 ## DDoS Open Threat Signaling
 
-DDoS Open Threat Signaling (DOTS) [@!RFC9132,8783] is a set of protocols for real-time signaling, threat-handling requests, and data filtering between multi vendor elements.
+DDoS Open Threat Signaling (DOTS) [@!RFC9132,8783] is a set of protocols for real-time signaling of threat-mitigation requests within and between different operational domains.
 
 Advantages:
 
@@ -495,6 +495,8 @@ Knot currently uses [@D-Bus] for this.
 > Make a single list of conditions with per condition indicated the parameters (how they can be influenced by configuration), the arguments (the signal payload) and "how to identify" if the condition can be identified from outside of the DNS server.
 
 > Removing DNS Error reporting monitoring agent as a channel to evaluate
+
+> Add DOTS and MQTT as a potential signal channels for our conditions
 
 * draft-grubto-dnsop-dns-out-of-protocol-signalling-02
 
