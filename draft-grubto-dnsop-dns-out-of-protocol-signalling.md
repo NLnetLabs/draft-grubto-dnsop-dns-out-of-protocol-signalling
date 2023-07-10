@@ -393,6 +393,12 @@ Knot currently uses [@D-Bus] for this.
 
 **Note to the RFC Editor**: please remove this entire appendix before publication.
 
+* draft-grubto-dnsop-dns-out-of-protocol-signalling-03
+
+> Rename "name server" into "DNS server" when it also applies to recursive resolvers
+
+> Make a single list of conditions with per condition indicated the parameters (how they can be influenced by configuration), the arguments (the signal payload) and "how to identify" if the condition can be identified from outside of the DNS server.
+
 * draft-grubto-dnsop-dns-out-of-protocol-signalling-02
 
 > Updates after discussion during the port53 hackathon in Rotterdam.
