@@ -295,24 +295,92 @@ Action:
 
 # Requirements for signalling mechanisms and channels {#requirements}
 
-The following requirements can be distilled from (#conditions_inside) and (#conditions_outside).
-
+- All conditions are sensitive information and should be stay either in the administered domain (for example on the local machine that is under control of the operator), or needs to be authenticated.
 
 # Existing signalling mechanisms and channels {#existing}
 
-What follows is a list of existing signalling mechanisms assessed on their suitability based on the requirements outlined in the previous paragraph.
+What follows is a list of existing signalling mechanisms and a comparison of those channels in (#comparison).
 
 ## Notify
 
-[@!RFC1996]
+DNS NOTIFY [@!RFC1996] is an existing ubiquitous mechanism to signal zones.
+It is intended to target name servers, but tooling exists to listen for NOTIFY messages and trigger execution of a command when a zone is updated (See [@?nsnotifyd]).
 
-## Extended DNS Error reporting
+Advantages:
 
-[@?I-D.ietf-dnsop-dns-error-reporting]
+  - Native signalling for zone updates present right now (See (#updatedzone))
+
+  - Indirect support for zone loaded (See (#azoneready))
+
+Disadvantages:
+
+  - One available Open Source Software which lacks authentication support and is therefore only suitable for local usage
+
+  - Only two conditions are signalled.
+
+  - Does not signal when the conditions are no longer met.
 
 ## D-Bus as publication channel {#dbus}
 
-[@?D-Bus]
+D-Bus is a mechanism for exchanging messages between processes local on the same machine (See [@?D-Bus]).
+The D-BUS protocol is a one-to-one protocol, but distribution of messages (or signals) to multiple other applications is carried out by a program intended for this purpose: the D-Bus *message bus*.
+
+Advantages:
+
+  - Implementation already exists (See [@?Knot-DNS-3.1.6])
+
+  - Good Open Source Software library support [TODO references]
+
+Disadvantages:
+
+  - Server needs to be started before clients making it less robust.
+
+  - Is only communicated locally to the machine
+
+## DDoS Open Threat Signaling
+
+DDoS Open Threat Signaling (DOTS) [@!RFC9132,8783] is a set of protocols for real-time signaling, threat-handling requests, and data filtering between multi vendor elements.
+
+Advantages:
+
+  - Publish / Subscribe mechanism
+
+  - Inter-operator communications
+
+  - Authenticated
+
+  - Open Source server software exists [TODO reference go-dots]
+
+Disadvantages:
+
+  - No Open Source client library exists? We need to get information during the upcoming hackathon at the IETF117.
+    Current DOTS builds upon CoAP [@!RFC7252] for which many client library implementations exist.
+
+## MQTT
+
+MQTT (see [@?MQTT-OASIS-Standard-v5]) is a lightweight publish-subscribe network protocol for messages.
+
+Advantages:
+
+  - Network Publish / Subscribe mechanism
+
+  - Supports authentication 
+
+
+Disadvantages:
+
+  - Need to gain experience at the IETF117 hackathon
+
+## Observations and comparison {#comparison}
+
+Method                      | NOTIFY | D-Bus | DOTS | MQTT |
+----------------------------|--------|-------|------|------|
+Local to machine            | +      | ++    | +    | +    |
+inter-machine               | +      | -     | +    | +    |
+inter-operator              | +      | -     | ++   | -    |
+Publish Subscribe           | -      | -     | ++   | ++   |
+Authentication              | +-     | -     | +    | +    |
+Client library availability | NA     | ++    | ?    | ++   |
 
 # Security and Privacy Considerations {#security}
 
@@ -380,6 +448,33 @@ Henrik Kramselund
   </front>
 </reference>
 
+<reference anchor="nsnotifyd" target="https://dotat.at/prog/nsnotifyd/">
+  <front>
+    <title>nsnotifyd: scripted DNS NOTIFY handler</title>
+    <author fullname="Tony Finch" initials="T." surname="Finch" />
+    <date month="Jan" year="2022" />
+  </front>
+</reference>
+
+<reference anchor="MQTT-OASIS-Standard-v5" target="https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html">
+  <front>
+    <title>OASIS Standard MQTT Version 5.0</title>
+    <author fullname="Andrew Banks" initials="A." surname="Banks">
+      <organization>IBM</organization>
+    </author>
+    <author fullname="Ed Briggs" initials="E." surname="Briggs">
+      <organization>Microsoft</organization>
+    </author>
+    <author fullname="Ken Borgendale" initials="K." surname="Borgendale">
+      <organization>IBM</organization>
+    </author>
+    <author fullname="Raphul Gupta" initials="R." surname="Gupta">
+      <organization>IBM</organization>
+    </author>
+    <date day="19" month="Mar" year="2019" />
+  </front>
+</reference>
+
 {backmatter}
 
 
@@ -398,6 +493,8 @@ Knot currently uses [@D-Bus] for this.
 > Rename "name server" into "DNS server" when it also applies to recursive resolvers
 
 > Make a single list of conditions with per condition indicated the parameters (how they can be influenced by configuration), the arguments (the signal payload) and "how to identify" if the condition can be identified from outside of the DNS server.
+
+> Removing DNS Error reporting monitoring agent as a channel to evaluate
 
 * draft-grubto-dnsop-dns-out-of-protocol-signalling-02
 
