@@ -108,16 +108,21 @@ Part of that effort is to assemble a list of conditions with potential associate
 
 # Introduction {#introduction}
 
-Operators of name servers can benefit from automatically taking action upon certain conditions in the name server software.
-Some conditions can be monitored from outside the name server software, but for adequate and immediate action, the name server software can signal itself about the condition immediately when it occurs to invoke action by a listener for these signals.
+Operators of DNS servers can benefit from automatically taking action upon certain conditions in the name server software.
+Some conditions can be monitored from outside the server software, but for adequate and immediate action, the server software itself should signal about the condition immediately when it occurs to invoke action by a listener for these signals.
 
-An example of such a condition is when all zones, from a set served from an anycasted prefix, are loaded and ready to be served, with the associated automatic actions to only announce a prefix route from the point-of-presence where the name server is running, if all zones from the set are ready to be served, and to withdraw the prefix route if one of the zones cannot be served.
+An example of such a condition is when all zones, from a set served from an anycasted prefix, are loaded and ready to be served.
+An associated action may be to start announcing a prefix route from the point-of-presence where the name server is running and to withdraw the prefix route if one of the zones cannot be served anymore.
 This way queries for zones will only reach the point-of-presence if the name server software can answer those queries.
 
-Operators of anycasted DNS authoritative services with diverse implementations will benefit from standardizing of the name server signalling, but before coming to a specification for the mechanism, this document will serve to inventorise the already available standardized and non-standardized signalling channels and assess them for usability for out of protocol signalling.
+Another example condition may be if an recursive resolver served from an anycasted prefix, is started and ready to serve, with the same associated action of only announcing the anycasted prefix when the recursive resolver can serve queries.
 
-Recursive server operators could also benefit from this, having an eventdriven infrastructure - when recursive server is ready to serve, start announcing the service address with BGP. The usual way to do this is by polling the server, and spending resources waiting for this service to come up.
+All anycasted DNS services can benefit from the mechanism alone, by the increased adequacy and reduced resources of not having to poll for a server's state.
+DNS services with diverse implementations will benefit from standardizing of the name server signalling.
 
+Before coming to a specification for the mechanism, this document will serve to inventorise the already available standardized and non-standardized signalling channels and assess them for usability for out of protocol signalling.
+
+[//]: # (Recursive resolver operators also benefit from this, having an eventdriven infrastructure - when recursive server is ready to serve, start announcing the service address with BGP. The usual way to do this is by polling the server, and spending resources waiting for this service to come up.)
 
 # Terminology and Definitions {#terminology}
 
