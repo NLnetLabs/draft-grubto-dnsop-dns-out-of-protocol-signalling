@@ -222,6 +222,17 @@ Action:
 
 Name servers can usually already signal this with NOTIFY [@!RFC1996]
 
+## A zone could not be refreshed {#norefresh}
+
+How to identify:
+
+  - logging might indicate a XFR failed.
+
+Action:
+
+  - Signal monitoring that there is a problem (maybe after X tries)
+
+
 ## A zone is (about to) expire
 
 Parameter:
