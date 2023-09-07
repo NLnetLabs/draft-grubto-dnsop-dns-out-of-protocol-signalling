@@ -398,9 +398,11 @@ This document has no IANA actions
 
 # Acknowledgements {#acknowledgements}
 
-We would like to thank the people of the port53 hackathon in Rotterdam for
+We would like to thank the people of the DNS Hackathon 2023 - Connect to port
+53 in Rotterdam for
 their contributions. Mainly Doris Hauser, Lars-Johan Liman, Vilhelm Prytz and
 Henrik Kramselund
+
 
 
 
